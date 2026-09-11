@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
+use App\Http\Controllers\Admin\HomeSettingController;
 use App\Http\Controllers\Admin\RoomController as AdminRoomController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
@@ -45,11 +47,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::resource('home-settings', HomeSettingController::class)->except('show');
     Route::resource('rooms', AdminRoomController::class)->except('show');
     Route::resource('gallery', AdminGalleryImageController::class)->except('show')->parameters([
         'gallery' => 'galleryImage',
     ]);
     Route::resource('testimonials', AdminTestimonialController::class)->except('show');
+    Route::resource('site-settings', SiteSettingController::class)->except('show');
 
     Route::get('enquiries', [EnquiryController::class, 'index'])->name('enquiries.index');
     Route::get('enquiries/{enquiry}', [EnquiryController::class, 'show'])->name('enquiries.show');

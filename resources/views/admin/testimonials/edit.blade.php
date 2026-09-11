@@ -3,6 +3,116 @@
 @section('title', 'Edit Testimonial')
 
 @section('content')
-  <h1>Edit testimonial</h1>
-  @include('admin.testimonials._form', ['testimonial' => $testimonial, 'action' => route('admin.testimonials.update', $testimonial), 'method' => 'PUT'])
+
+<div class="content-wrapper">
+
+
+<div class="content-header row">
+
+    <div class="content-header-left col-md-6 col-12 mb-1">
+        <h3 class="content-header-title">
+            <a href="{{ route('admin.testimonials.index') }}" class="btn btn-primary">
+                {{ __('Testimonial List') }}
+                <i class="feather icon-eye"></i>
+            </a>
+        </h3>
+    </div>
+
+    <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-12">
+        <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
+                        {{ __('Home') }}
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    {{ __('Testimonials') }}
+                </li>
+
+                <li class="breadcrumb-item active">
+                    {{ __('Edit Testimonial') }}
+                </li>
+
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+<div class="content-body">
+
+    <section id="basic-form">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                @include('partials.session_message')
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h4 class="card-title">Edit Testimonial</h4>
+                    </div>
+
+                    <div class="card-content collapse show">
+
+                        <div class="card-body card-dashboard">
+
+                            <form
+                                method="POST"
+                                action="{{ route('admin.testimonials.update', $testimonial) }}"
+                                class="form"
+                            >
+
+                                @csrf
+                                @method('PUT')
+
+                                <div class="form-body">
+
+                                    @include('admin.testimonials._form', [
+                                        'testimonial' => $testimonial
+                                    ])
+
+                                </div>
+
+                                <div class="form-actions right">
+
+                                    <a
+                                        href="{{ route('admin.testimonials.index') }}"
+                                        class="btn btn-secondary mr-1"
+                                    >
+                                        <i class="feather icon-x"></i>
+                                        Cancel
+                                    </a>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-check-square-o"></i>
+                                        Update
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+</div>
+
 @endsection

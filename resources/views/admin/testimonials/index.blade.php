@@ -4,35 +4,186 @@
 
 @section('content')
 
-  <div class="top-bar">
-    <h1>Testimonials</h1>
-    <a href="{{ route('admin.testimonials.create') }}" class="btn">Add testimonial</a>
-  </div>
+    <div class="content-wrapper">
 
-  <table>
-    <thead>
-      <tr><th>Guest</th><th>Quote</th><th>Rating</th><th>Published</th><th></th></tr>
-    </thead>
-    <tbody>
-      @forelse ($testimonials as $t)
-        <tr>
-          <td>{{ $t->guest_name }}</td>
-          <td>{{ Str::limit($t->quote, 60) }}</td>
-          <td>{{ $t->rating }}/5</td>
-          <td>{{ $t->is_published ? 'Yes' : 'No' }}</td>
-          <td>
-            <a href="{{ route('admin.testimonials.edit', $t) }}">Edit</a>
-            &nbsp;
-            <form action="{{ route('admin.testimonials.destroy', $t) }}" method="POST" style="display:inline" onsubmit="return confirm('Delete this testimonial?')">
-              @csrf @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-          </td>
-        </tr>
-      @empty
-        <tr><td colspan="5">No testimonials yet.</td></tr>
-      @endforelse
-    </tbody>
-  </table>
+
+        <div class="content-header row">
+
+            <div class="content-header-left col-md-6 col-12 mb-1">
+
+                <h3 class="content-header-title">
+                    <a href="{{ route('admin.testimonials.create') }}" class="btn btn-primary">
+                        {{ __('Add Testimonial') }}
+                        <i class="feather icon-plus"></i>
+                    </a>
+                </h3>
+
+            </div>
+
+            <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-12">
+
+                <div class="breadcrumb-wrapper col-12">
+
+                    <ol class="breadcrumb">
+
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.dashboard') }}">
+                                {{ __('Home') }}
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            {{ __('Testimonials') }}
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="content-body">
+
+            <section id="configuration">
+
+                <div class="row">
+
+                    <div class="col-12">
+
+                        @include('partials.session_message')
+
+                        <div class="card rounded">
+
+                            <div class="card-content collapse show">
+
+                                <div class="card-body card-dashboard">
+
+                                    <h4 class="card-title">
+                                        Testimonial List
+                                    </h4>
+
+                                    <div class="table-responsive">
+
+                                        <table class="table table-striped table-bordered datatable">
+
+                                            <thead>
+
+                                                <tr>
+                                                    <th>Sl</th>
+                                                    <th>Guest</th>
+                                                    <th>Quote</th>
+                                                    <th>Rating</th>
+                                                    <th>Stay Context</th>
+                                                    <th>Published</th>
+                                                    <th>Sort Order</th>
+                                                    <th>Action</th>
+                                                </tr>
+
+                                            </thead>
+
+                                            <tbody>
+
+                                                @forelse ($testimonials as $testimonial)
+                                                    <tr>
+
+                                                        <td>
+                                                            {{ $loop->iteration }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $testimonial->guest_name }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ Str::limit($testimonial->quote, 80) }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $testimonial->rating }}/5
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $testimonial->stay_context ?? '—' }}
+                                                        </td>
+
+                                                        <td>
+
+                                                            @if ($testimonial->is_published)
+                                                                <span class="badge badge-success">
+                                                                    Published
+                                                                </span>
+                                                            @else
+                                                                <span class="badge badge-secondary">
+                                                                    Draft
+                                                                </span>
+                                                            @endif
+
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $testimonial->sort_order ?? 0 }}
+                                                        </td>
+
+                                                        <td>
+
+                                                            <a href="{{ route('admin.testimonials.edit', $testimonial) }}"
+                                                                class="btn btn-primary" title="Edit">
+                                                                <i class="feather icon-edit-2"></i>
+                                                            </a>
+
+                                                            <form
+                                                                action="{{ route('admin.testimonials.destroy', $testimonial) }}"
+                                                                method="POST" style="display:inline"
+                                                                onsubmit="return confirm('Delete this testimonial?')">
+
+                                                                @csrf
+                                                                @method('DELETE')
+
+                                                                <button type="submit" class="btn btn-danger"
+                                                                    title="Delete">
+                                                                    <i class="feather icon-trash"></i>
+                                                                </button>
+
+                                                            </form>
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                @empty
+
+                                                    <tr>
+
+                                                        <td colspan="8" class="text-center">
+                                                            No testimonials yet.
+                                                        </td>
+
+                                                    </tr>
+                                                @endforelse
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+    </div>
 
 @endsection
