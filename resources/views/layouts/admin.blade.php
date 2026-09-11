@@ -1,64 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Dashboard') — Casa Ulika Admin</title>
-  <style>
-    :root { --ink: #1f2320; --paper: #faf7f2; --ochre: #b5651d; --line: #e2ddd3; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--paper); color: var(--ink); }
-    .admin-shell { display: flex; min-height: 100vh; }
-    .admin-sidebar { width: 220px; background: var(--ink); color: #fff; padding: 1.5rem 1rem; flex-shrink: 0; }
-    .admin-sidebar a { display: block; color: #fff; opacity: .8; text-decoration: none; padding: .6rem .75rem; border-radius: 6px; margin-bottom: .25rem; }
-    .admin-sidebar a:hover, .admin-sidebar a.active { opacity: 1; background: rgba(255,255,255,.12); }
-    .admin-sidebar .brand { font-weight: 700; font-size: 1.1rem; margin-bottom: 1.5rem; display: block; }
-    .admin-main { flex: 1; padding: 2rem; max-width: 1000px; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
-    th, td { text-align: left; padding: .65rem .85rem; border-bottom: 1px solid var(--line); font-size: .92rem; }
-    th { background: #f1ede5; }
-    .btn { display: inline-block; padding: .5rem 1rem; border-radius: 6px; background: var(--ochre); color: #fff; text-decoration: none; border: none; cursor: pointer; font-size: .9rem; }
-    .btn-secondary { background: #6b7280; }
-    .btn-danger { background: #b3261e; }
-    .btn-sm { padding: .3rem .65rem; font-size: .82rem; }
-    .field { margin-bottom: 1rem; }
-    .field label { display: block; font-weight: 600; margin-bottom: .3rem; font-size: .9rem; }
-    .field input, .field textarea, .field select { width: 100%; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: 6px; font-size: .95rem; }
-    .field .error { color: #b3261e; font-size: .82rem; margin-top: .25rem; }
-    .alert { padding: .75rem 1rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: .9rem; }
-    .alert-success { background: #e6f4ea; color: #1e4620; }
-    .badge { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 600; }
-    .badge-new { background: #fde68a; color: #7c4a03; }
-    .badge-read { background: #dbeafe; color: #1e3a8a; }
-    .badge-archived { background: #e5e7eb; color: #374151; }
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card { background: #fff; border-radius: 8px; padding: 1.1rem; border: 1px solid var(--line); }
-    .stat-card .num { font-size: 1.6rem; font-weight: 700; }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-  </style>
-</head>
-<body>
-  <div class="admin-shell">
-    <aside class="admin-sidebar">
-      <span class="brand">Casa Ulika <br>Admin</span>
-      <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a>
-      <a href="{{ route('admin.rooms.index') }}" class="{{ request()->routeIs('admin.rooms.*') ? 'active' : '' }}">Rooms</a>
-      <a href="{{ route('admin.gallery.index') }}" class="{{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">Gallery</a>
-      <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">Testimonials</a>
-      <a href="{{ route('admin.enquiries.index') }}" class="{{ request()->routeIs('admin.enquiries.*') ? 'active' : '' }}">Enquiries</a>
-      <a href="{{ route('home') }}" target="_blank">View site &rarr;</a>
-      <form method="POST" action="{{ route('admin.logout') }}" style="margin-top: 1.5rem;">
-        @csrf
-        <button type="submit" class="btn btn-secondary btn-sm" style="width: 100%;">Log out</button>
-      </form>
-    </aside>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
 
-    <main class="admin-main">
-      @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-      @endif
-      @yield('content')
-    </main>
-  </div>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>{{ env('APP_NAME') }} | @yield('title')</title>
+    <link rel="apple-touch-icon" href="{{ asset('backend/app-assets/images/ico/apple-icon-120.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('backend/app-assets/images/ico/favicon.ico') }}">
+    <link
+        href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/vendors/css/vendors.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset ('backend/app-assets/vendors/css/forms/selects/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset ('backend/app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset ('backend/assets/css/dropify.min.css')}}">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/bootstrap-extended.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/colors.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/components.css') }}">
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
+    <!-- link(rel='stylesheet', type='text/css', href=app_assets_path+'/css'+rtl+'/pages/users.css')-->
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    <!-- END: Custom CSS-->
+
+    @yield('css')
+
+</head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
+<body class="vertical-layout vertical-menu 2-columns   fixed-navbar" data-open="click" data-menu="vertical-menu"
+    data-col="2-columns">
+
+    <input type="hidden" id="csrfToken" value="{{ csrf_token() }}">
+
+    <!-- BEGIN: Header-->
+    @include('layouts.header')
+    <!-- END: Header-->
+
+    <!-- BEGIN: Main Menu-->
+    @include('layouts.sidebar')
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        @yield('content')
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- BEGIN: Footer-->
+    @include('layouts.footer')
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="{{ asset('backend/app-assets/vendors/js/vendors.min.js') }}"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('backend/app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('backend/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    <script src="{{ asset('backend/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset ('backend/assets/js/dropify.min.js')}}"></script>
+
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="{{ asset('backend/app-assets/js/core/app-menu.js') }}"></script>
+    <script src="{{ asset('backend/app-assets/js/core/app.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/dropify-init.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/datatable.js') }}"></script>
+    <!-- END: Theme JS-->
+
+
+    <script>
+        // Get all forms on the page
+        const forms = document.querySelectorAll('form');
+
+        // Function to disable the submit button of a form
+        function disableSubmitButton(form) {
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+        }
+
+        // Add event listener to each form's submit event
+        forms.forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                // Disable the submit button of the current form
+                disableSubmitButton(form);
+            });
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".form").submit( function (){
+                $(".submit-btn").attr("disabled", true);
+                return true;
+            });
+
+            $(".select2").select2();
+        })
+    </script>
+
+    <!-- BEGIN: Page JS-->
+    @yield('script')
+    <!-- END: Page JS-->
+
 </body>
+<!-- END: Body-->
+
 </html>

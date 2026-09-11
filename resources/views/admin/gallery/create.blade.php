@@ -1,8 +1,117 @@
 @extends('layouts.admin')
 
-@section('title', 'Add Image')
+@section('title', 'Create Gallery Image')
 
 @section('content')
-  <h1>Add gallery image</h1>
-  @include('admin.gallery._form', ['image' => null, 'action' => route('admin.gallery.store'), 'method' => 'POST'])
+
+<div class="content-wrapper">
+
+
+<div class="content-header row">
+
+    <div class="content-header-left col-md-6 col-12 mb-1">
+        <h3 class="content-header-title">
+            <a href="{{ route('admin.gallery.index') }}" class="btn btn-primary">
+                {{ __('Gallery List') }}
+                <i class="feather icon-eye"></i>
+            </a>
+        </h3>
+    </div>
+
+    <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-12">
+        <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
+                        {{ __('Home') }}
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    {{ __('Gallery') }}
+                </li>
+
+                <li class="breadcrumb-item active">
+                    {{ __('Create Image') }}
+                </li>
+
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+<div class="content-body">
+
+    <section id="basic-form">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                @include('partials.session_message')
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h4 class="card-title">Add Gallery Image</h4>
+                    </div>
+
+                    <div class="card-content collapse show">
+
+                        <div class="card-body card-dashboard">
+
+                            <form
+                                method="POST"
+                                action="{{ route('admin.gallery.store') }}"
+                                class="form"
+                            >
+
+                                @csrf
+
+                                <div class="form-body">
+
+                                    @include('admin.gallery._form', [
+                                        'image' => null
+                                    ])
+
+                                </div>
+
+                                <div class="form-actions right">
+
+                                    <a
+                                        href="{{ route('admin.gallery.index') }}"
+                                        class="btn btn-secondary mr-1"
+                                    >
+                                        <i class="feather icon-x"></i>
+                                        Cancel
+                                    </a>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-check-square-o"></i>
+                                        Submit
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+</div>
+
 @endsection
