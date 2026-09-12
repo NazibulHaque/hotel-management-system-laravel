@@ -201,10 +201,6 @@ select:focus-visible {
   display: grid;
   align-items: stretch;
   min-height: 78vh;
-
-  background-image: 
-    linear-gradient(rgba(66, 58, 36, 0.60), rgba(66, 58, 36, 0.60)),
-    url("../images/superior-king.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

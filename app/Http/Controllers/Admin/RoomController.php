@@ -24,11 +24,14 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $data = $this->validated($request);
+
         $data['slug'] = Str::slug($data['name']);
 
         Room::create($data);
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Room created.');
+        return redirect()
+            ->route('admin.rooms.index')
+            ->with('success', 'Room created.');
     }
 
     public function edit(Room $room)
@@ -38,40 +41,84 @@ class RoomController extends Controller
 
     public function update(Request $request, Room $room)
     {
-        $data = $this->validated($request);
+        $data = $this->validated($request, $room);
+
         $data['slug'] = Str::slug($data['name']);
 
         $room->update($data);
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Room updated.');
+        return redirect()
+            ->route('admin.rooms.index')
+            ->with('success', 'Room updated.');
     }
 
     public function destroy(Room $room)
     {
         $room->delete();
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Room deleted.');
+        return redirect()
+            ->route('admin.rooms.index')
+            ->with('success', 'Room deleted.');
     }
 
-    private function validated(Request $request): array
-    {
+    private function validated(
+        Request $request,
+        ?Room $room = null
+    ): array {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'description' => ['required', 'string'],
             'size_sqm' => ['nullable', 'integer', 'min:1'],
             'sleeps' => ['required', 'integer', 'min:1', 'max:12'],
             'price_per_night' => ['required', 'numeric', 'min:0'],
-            'amenities' => ['nullable', 'string'], // comma-separated in the form
-            'image_path' => ['nullable', 'string', 'max:255'],
+            'amenities' => ['nullable', 'string'],
+
+            'image_path' => [
+                $room ? 'nullable' : 'required',
+                'image',
+                'mimes:jpeg,png,jpg,webp',
+                'max:5120',
+            ],
+
             'sort_order' => ['nullable', 'integer'],
             'is_published' => ['nullable', 'boolean'],
         ]);
 
-        $data['amenities'] = collect(explode(',', $data['amenities'] ?? ''))
+        /*
+        |--------------------------------------------------------------------------
+        | Upload room image
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('image_path')) {
+            $path = $request->file('image_path')
+                ->store('rooms', 'public');
+
+            $data['image_path'] = 'storage/' . $path;
+        } elseif ($room) {
+            // Keep the existing image when no new image is uploaded.
+            $data['image_path'] = $room->image_path;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Amenities
+        |--------------------------------------------------------------------------
+        */
+
+        $data['amenities'] = collect(
+            explode(',', $data['amenities'] ?? '')
+        )
             ->map(fn ($a) => trim($a))
             ->filter()
             ->values()
             ->all();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Other fields
+        |--------------------------------------------------------------------------
+        */
 
         $data['is_published'] = $request->boolean('is_published');
         $data['sort_order'] = $data['sort_order'] ?? 0;
@@ -79,3 +126,4 @@ class RoomController extends Controller
         return $data;
     }
 }
+

@@ -65,7 +65,7 @@
                             <form
                                 method="POST"
                                 action="{{ route('admin.gallery.update', $image) }}"
-                                class="form"
+                                class="form" enctype="multipart/form-data"
                             >
 
                                 @csrf

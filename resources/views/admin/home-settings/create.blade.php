@@ -65,7 +65,7 @@
 
                                 <div class="card-body card-dashboard">
 
-                                    <form method="POST" action="{{ route('admin.home-settings.store') }}" class="form">
+                                    <form method="POST" action="{{ route('admin.home-settings.store') }}" class="form" enctype="multipart/form-data">
 
                                         @csrf
 

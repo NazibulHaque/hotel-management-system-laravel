@@ -65,7 +65,7 @@
                             <form
                                 method="POST"
                                 action="{{ route('admin.gallery.store') }}"
-                                class="form"
+                                class="form" enctype="multipart/form-data"
                             >
 
                                 @csrf

@@ -95,13 +95,26 @@
 
     <div class="col-md-6 form-group">
         <label for="image_path">
-            Image path or URL
+            Image <span class="text-danger">*</span>
         </label>
-        <input type="text" class="form-control" id="image_path" name="image_path" placeholder="images/room.jpg"
-            value="{{ old('image_path', $room->image_path ?? '') }}">
+
+        <input type="file" id="image_path" name="image_path" class="form-control"
+            accept="image/jpeg,image/png,image/jpg,image/webp" @if (!isset($room)) required @endif>
+
         @error('image_path')
             <span class="text-danger">{{ $message }}</span>
         @enderror
+
+        @if (isset($room) && $room->image_path)
+            <div class="mt-2">
+                <img src="{{ Str::startsWith($room->image_path, 'http') ? $room->image_path : asset($room->image_path) }}"
+                    alt="{{ $room->name }}" style="max-width: 200px; height: auto; border-radius: 5px;">
+
+                <p class="text-muted mt-1 mb-0">
+                    Leave empty to keep the current image.
+                </p>
+            </div>
+        @endif
     </div>
 
 </div>

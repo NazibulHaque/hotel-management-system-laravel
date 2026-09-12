@@ -62,7 +62,7 @@
 
                                 <div class="card-body card-dashboard">
 
-                                    <form method="POST" action="{{ route('admin.rooms.update', $room) }}" class="form">
+                                    <form method="POST" action="{{ route('admin.rooms.update', $room) }}" class="form" enctype="multipart/form-data">
 
                                         @csrf
                                         @method('PUT')

@@ -59,15 +59,28 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="hero_image">
-                {{ __('Hero Image URL / Path') }}
+                {{ __('Hero Image') }}
             </label>
 
-            <input type="text" id="hero_image" name="hero_image" class="form-control"
-                value="{{ old('hero_image', $home->hero_image ?? '') }}" placeholder="images/hero.jpg or https://...">
+            <input type="file" id="hero_image" name="hero_image" class="form-control"
+                accept="image/jpeg,image/png,image/jpg,image/webp">
 
             @error('hero_image')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
+
+            @if (isset($home) && $home->hero_image)
+                <div class="mt-2">
+                    <img src="{{ \Illuminate\Support\Str::startsWith($home->hero_image, 'http')
+                        ? $home->hero_image
+                        : asset($home->hero_image) }}"
+                        alt="Hero Image" style="max-width: 300px; height: auto; border-radius: 5px;">
+
+                    <p class="text-muted mt-1 mb-0">
+                        Leave empty to keep the current image.
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
 

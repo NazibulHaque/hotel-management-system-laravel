@@ -56,7 +56,7 @@
 
                                 <div class="card-body card-dashboard">
 
-                                    <form method="POST" action="{{ route('admin.rooms.store') }}" class="form">
+                                    <form method="POST" action="{{ route('admin.rooms.store') }}" class="form" enctype="multipart/form-data">
                                         @csrf
 
                                         <div class="form-body">
