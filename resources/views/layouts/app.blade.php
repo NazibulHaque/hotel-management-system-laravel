@@ -18,7 +18,7 @@
 
     <meta
         name="description"
-        content="{{ $settings->footer_description ?? 'Casa Ulika is a boutique hotel in Sydney, Australia.' }}"
+        content="{{ $settings->footer_description ?? 'A restored 1887 olive mill in Sydney, Australia — twelve rooms, a working olive grove, and the sea at the door.' }}"
     >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,7 +69,7 @@
                 href="{{ route('home') }}"
                 class="wordmark"
             >
-                {{ $settings->site_name ?? 'Casa' }}
+                {{ $settings->site_name ?? 'Casa Ulika' }}
             </a>
 
 
@@ -79,9 +79,7 @@
                 aria-expanded="false"
                 aria-controls="main-nav"
             >
-
                 <span></span>
-
             </button>
 
 
@@ -189,7 +187,7 @@
                     <p
                         style="margin-top:1rem; opacity:0.85; max-width:32ch;"
                     >
-                        {{ $settings->footer_description ?? 'A restored 1887 olive mill in Sydney, Australia.' }}
+                        {{ $settings->footer_description ?? 'A restored 1887 olive mill in Sydney, Australia — twelve rooms, a working olive grove, and the sea at the door.' }}
                     </p>
 
                 </div>
@@ -234,7 +232,7 @@
                 </div>
 
 
-                {{-- Contact --}}
+                {{-- Contact / Visit --}}
 
                 <div>
 
@@ -244,20 +242,16 @@
 
                     <ul>
 
-                        @if ($settings && $settings->address)
-                            <li>
-                                {{ $settings->address }}
-                            </li>
-                        @endif
+                        <li>
+                            {{ $settings->address ?? 'Ulica Maslina 12, Sydney, Australia' }}
+                        </li>
 
 
-                        @if ($settings && $settings->email)
-                            <li>
-                                <a href="mailto:{{ $settings->email }}">
-                                    {{ $settings->email }}
-                                </a>
-                            </li>
-                        @endif
+                        <li>
+                            <a href="mailto:{{ $settings->email ?? 'stay@casaulika.example' }}">
+                                {{ $settings->email ?? 'stay@casaulika.example' }}
+                            </a>
+                        </li>
 
 
                         @if ($settings && $settings->phone)
@@ -276,7 +270,7 @@
             </div>
 
 
-            {{-- Social Media --}}
+            {{-- ================= SOCIAL MEDIA ================= --}}
 
             @if (
                 ($settings && $settings->facebook_url) ||
@@ -287,6 +281,7 @@
                 <div class="footer-social">
 
                     @if ($settings->facebook_url)
+
                         <a
                             href="{{ $settings->facebook_url }}"
                             target="_blank"
@@ -295,10 +290,12 @@
                         >
                             <i class="fab fa-facebook-f"></i>
                         </a>
+
                     @endif
 
 
                     @if ($settings->instagram_url)
+
                         <a
                             href="{{ $settings->instagram_url }}"
                             target="_blank"
@@ -307,10 +304,12 @@
                         >
                             <i class="fab fa-instagram"></i>
                         </a>
+
                     @endif
 
 
                     @if ($settings->twitter_url)
+
                         <a
                             href="{{ $settings->twitter_url }}"
                             target="_blank"
@@ -319,6 +318,7 @@
                         >
                             <i class="fab fa-x-twitter"></i>
                         </a>
+
                     @endif
 
                 </div>
@@ -326,13 +326,15 @@
             @endif
 
 
+            {{-- ================= COPYRIGHT ================= --}}
+
             <div class="footer-bottom">
 
                 <p>
 
                     &copy; {{ date('Y') }}
 
-                    {{ $settings->site_name ?? env('APP_NAME', 'Casa Ulika') }}.
+                    {{ $settings->site_name ?? 'Casa Ulika' }}.
 
                     {{ $settings->copyright_text ?? 'All rights reserved.' }}
 
@@ -352,3 +354,4 @@
 </body>
 
 </html>
+
